@@ -10,7 +10,7 @@ import com.google.ads.*;
 import com.google.ads.AdRequest.ErrorCode;
 
 public class AdsPlugin {
-	static final int bannerViewId = 0x661ad306; 
+	static final int bannerViewId = 0x661ad306; // Don't be scared, it's just a random unique number
 	static Activity activityParent = null;
 	static String publisherId = "";
 	static String publisherInterstitialId = "";
@@ -27,28 +27,31 @@ public class AdsPlugin {
 	
 	static public void ShowInterstitial()
 	{
-	    interstitial = new InterstitialAd(activityParent, publisherInterstitialId);
-	    AdRequest adRequest = new AdRequest();
-	    interstitial.loadAd(adRequest);
-	    interstitial.setAdListener(new AdListener() {
-			@Override
-			public void onReceiveAd(Ad ad) {
-				// TODO Auto-generated method stub
-				Log.d("OK", "Received ad");
-			    if (ad == interstitial) {
-			      interstitial.show();
-			    }
-			}
-			
-			@Override
-			public void onPresentScreen(Ad arg0) { }
-			@Override
-			public void onLeaveApplication(Ad arg0) { }
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) { }
-			@Override
-			public void onDismissScreen(Ad arg0) { }
-		});
+		activityParent.runOnUiThread(new Runnable() {
+            public void run() {
+			    interstitial = new InterstitialAd(activityParent, publisherInterstitialId);
+			    AdRequest adRequest = new AdRequest();
+			    interstitial.loadAd(adRequest);
+			    interstitial.setAdListener(new AdListener() {
+					@Override
+					public void onReceiveAd(Ad ad) {
+						// TODO Auto-generated method stub
+						Log.d("OK", "Received ad");
+					    if (ad == interstitial) {
+					      interstitial.show();
+					    }
+					}
+					
+					@Override
+					public void onPresentScreen(Ad arg0) { }
+					@Override
+					public void onLeaveApplication(Ad arg0) { }
+					@Override
+					public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) { }
+					@Override
+					public void onDismissScreen(Ad arg0) { }
+				});
+            }});
 	}
 	
 	static public void ShowBanner() {
